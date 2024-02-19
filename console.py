@@ -115,38 +115,33 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """ Create an object with given parameters """
-        args = arg.split()
-        if len(args) < 2:
-            print("** missing class name **")
-            return
+        try:
+            if not arg:
+                raise SyntaxError("** class name missing **")
 
-        class_name = args[0]
-        if class_name not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
+            args = arg.split()
+            class_name = args[0]
 
-        param = {}
-        for p in args[1:]:
-            try:
-                key, value = p.split('=')
-                if not key or not value:
-                    print("** invalid parameter syntax: {} **".format(p))
-                    continue
+            if class_name not in HBNBCommand.classes:
+                raise NameError("** class doesn't exist **")
 
-                if value[0] == '"' and value[-1] == '"':
-                    value = value[1:-1].replace('_', ' ')
-                elif '.' in value:
-                    value = float(value)
-                else:
-                    value = int(value)
+            params = {}
+            for param in args[1:]:
+                key, value = param.split('=')
+                value = eval(value)
+                if isinstance(value, str):
+                    value = value.replace('_', ' ').replace('"', '\\"')
 
-                    param[key] = value
-            except ValueError:
-                print("** invalid parameter syntax: {} **".format(p))
+                    params[key] = value
 
-        new_instance = HBNBCommand.classes[class_name](**param)
-        new_instance.save()
-        print(new_instance.id)
+                    new_instance = HBNBCommand.classes[class_name](**params)
+                    new_instance.save()
+                    print(new_instance.id)
+
+        except SyntaxError as error:
+            print(error)
+        except NameError as error:
+            print(error)
 
     def help_create(self):
         """ Help information for the create method """
