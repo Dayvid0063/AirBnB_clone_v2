@@ -113,18 +113,40 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, args):
-        """ Create an object of any class"""
-        if not args:
-            print("** class name missing **")
+    def do_create(self, arg):
+        """ Create an object with given parameters """
+        args = arg.split()
+        if len(args) < 2:
+            print("** missing class name **")
             return
-        elif args not in HBNBCommand.classes:
+
+        class_name = args[0]
+        if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
+
+        param = {}
+        for p in args[1:]:
+            try:
+                key, value = p.split('=')
+                if not key or not value:
+                    print("** invalid parameter syntax: {} **".format(p))
+                    continue
+
+                if value[0] == '"' and value[-1] == '"':
+                    value = value[1:-1].replace('_', ' ')
+                elif '.' in value:
+                    value = float(value)
+                else:
+                    value = int(value)
+
+                    param[key] = value
+            except ValueError:
+                print("** invalid parameter syntax: {} **".format(p))
+
+        new_instance = HBNBCommand.classes[class_name](**param)
+        new_instance.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
@@ -319,6 +341,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
