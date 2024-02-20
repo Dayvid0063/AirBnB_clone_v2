@@ -51,7 +51,8 @@ class TestFileStorage(unittest.TestCase):
         thing = new.to_dict()
         new.save()
         new2 = BaseModel(**thing)
-        self.assertNotEqual(os.path.getsize(storage._FileStorage__file_path), 0)
+        self.assertNotEqual(os.path.getsize
+                            (storage._FileStorage__file_path), 0)
 
     def test_save(self):
         """ FileStorage save method """

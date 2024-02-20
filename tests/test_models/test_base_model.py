@@ -70,8 +70,10 @@ class TestBaseModel(unittest.TestCase):
         """Test to_dict method returns correct datetime format"""
         model = BaseModel()
         model_dict = model.to_dict()
-        self.assertEqual(model.created_at.isoformat(), model_dict["created_at"])
-        self.assertEqual(model.updated_at.isoformat(), model_dict["updated_at"])
+        self.assertEqual(model.created_at.isoformat(),
+                         model_dict["created_at"])
+        self.assertEqual(model.updated_at.isoformat(),
+                         model_dict["updated_at"])
 
     def test_to_dict_method_excludes_sa_instance_state(self):
         """Test to_dict method excludes _sa_instance_state key"""
