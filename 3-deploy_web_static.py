@@ -63,6 +63,4 @@ def do_deploy(archive_path):
 def deploy():
     """Create and distribute archive"""
     output = do_pack()
-    if output is None:
-        return False
-    return do_deploy(output)
+    return do_deploy(output) if output else False
