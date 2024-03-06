@@ -19,6 +19,7 @@ def do_deploy(archive_path):
     filename = os.path.basename(archive_path)
     dir_name = filename.replace(".tgz", "")
     dir_path = "/data/web_static/releases/{}/".format(dir_name)
+    res = False
 
     try:
         put(archive_path, '/tmp/')
@@ -30,6 +31,7 @@ def do_deploy(archive_path):
         run("rm -rf /data/web_static/current")
         run("ln -s {} /data/web_static/current".format(dir_path))
         print('Deployed!')
-        return True
+        res = True
     except Exception:
-        return False
+        res = False
+    return res
