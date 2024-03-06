@@ -39,13 +39,13 @@ def do_deploy(archive_path):
     if not os.path.exists(archive_path):
         return False
 
-    put(archive_path, '/tmp/')
-
     filename = os.path.basename(archive_path)
     dir_name = filename.replace(".tgz", "")
     dir_path = "/data/web_static/releases/{}/".format(dir_name)
+    res = False
 
     try:
+        put(archive_path, "/tmp/{}".format(filename))
         run("mkdir -p {}".format(dir_path))
         run("tar -xzf /tmp/{} -C {}".format(filename, dir_path))
         run("rm -rf /tmp/{}".format(filename))
@@ -53,11 +53,11 @@ def do_deploy(archive_path):
         run("rm -rf {}web_static".format(dir_path))
         run("rm -rf /data/web_static/current")
         run("ln -s {} /data/web_static/current".format(dir_path))
-        print('Deployed!')
-        return True
-    except Exception as e:
-        print('Deployment failed:', str(e))
-        return False
+        print('New version deployed!')
+        res = True
+    except Exception:
+        res = False
+    return res
 
 
 def deploy():
