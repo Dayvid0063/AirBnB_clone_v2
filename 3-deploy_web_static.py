@@ -4,8 +4,8 @@
 
 from datetime import datetime
 from fabric.api import env, put, run, local
-import os.path
 import os
+
 
 env.hosts = ['100.24.244.220', '34.239.250.31']
 
@@ -63,7 +63,7 @@ def do_deploy(archive_path):
 
 def deploy():
     """Create and distribute archive"""
-    file = do_pack()
-    if file is None:
+    archive_path = do_pack()
+    if archive_path is None:
         return False
-    return do_deploy(file)
+    return do_deploy(archive_path)
