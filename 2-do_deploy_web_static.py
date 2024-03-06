@@ -16,13 +16,12 @@ def do_deploy(archive_path):
     if not os.path.exists(archive_path):
         return False
 
-    put(archive_path, '/tmp/')
-
     filename = os.path.basename(archive_path)
     dir_name = filename.replace(".tgz", "")
     dir_path = "/data/web_static/releases/{}/".format(dir_name)
 
     try:
+        put(archive_path, '/tmp/')
         run("mkdir -p {}".format(dir_path))
         run("tar -xzf /tmp/{} -C {}".format(filename, dir_path))
         run("rm -rf /tmp/{}".format(filename))
