@@ -4,6 +4,7 @@
 
 from datetime import datetime
 from fabric.api import env, put, run, local
+import os.path
 import os
 
 env.hosts = ['100.24.244.220', '34.239.250.31']
